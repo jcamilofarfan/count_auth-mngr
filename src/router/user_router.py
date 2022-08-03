@@ -37,7 +37,7 @@ def create_user(user: user_schema.UserRegister = Body(...)):
     return user_service.create_user(user)
 
 @router.post(
-    "/login",
+    "/login/",
     tags=["users"],
     response_model=Token
 )
@@ -55,3 +55,21 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     """
     access_token = auth_service.generate_token(form_data.username, form_data.password)
     return Token(access_token=access_token, token_type="bearer")
+
+@router.post(
+    "/login/refresh/",
+    tags=["users"],
+    response_model=Token
+)
+async def refresh_access_token(token: str = Depends(auth_service.get_current_user)):
+    """
+    ## Refresh access token
+
+    ### Args
+    The app can recive next fields by form data
+    - token: Your access token
+
+    ### Returns
+    - access token and token type
+    """
+    return Token(access_token=token, token_type="bearer")

@@ -68,6 +68,20 @@ def generate_token(username, password):
         data={"user": user.username, "email": user.email}, expires_delta=access_token_expires
     )
 
+def refresh_token(username, email, exp):
+    date = datetime.fromtimestamp(exp)
+    if date < datetime.now():
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Token expired",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    return create_access_token(
+        data={"user": username, "email": email}, expires_delta=access_token_expires
+    )
+
+
 
 async def get_current_user(token: str = Depends(oauth2_scheme)):
     credentials_exception = HTTPException(
@@ -77,14 +91,14 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
     )
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        username: str = payload.get("sub")
+        username: str = payload.get("user")
+        expiration: datetime = payload.get("exp")
         if username is None:
             raise credentials_exception
-        token_data = TokenData(username=username)
     except JWTError:
         raise credentials_exception
-
-    user = get_user(username=token_data.username)
-    if user is None:
+    user = get_user(username)
+    if not user:
         raise credentials_exception
-    return user
+    token = refresh_token(username, user.email, expiration)
+    return token
