@@ -65,7 +65,7 @@ def generate_token(username, password):
         )
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     return create_access_token(
-        data={"sub": user.username}, expires_delta=access_token_expires
+        data={"user": user.username, "email": user.email}, expires_delta=access_token_expires
     )
 
 
