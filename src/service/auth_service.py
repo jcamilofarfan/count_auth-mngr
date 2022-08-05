@@ -8,7 +8,7 @@ from jose import JWTError, jwt
 from passlib.context import CryptContext
 
 from src.model.user_model import User as UserModel
-from src.schema.token_schema import TokenData
+# from src.schema.token_schema import TokenData
 from src.utils.settings import Settings
 
 settings = Settings()
