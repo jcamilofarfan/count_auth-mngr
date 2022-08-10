@@ -1,0 +1,6 @@
+name: Actions DEV
+
+on:
+  push:
+    branches:
+      - dev
