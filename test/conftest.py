@@ -4,6 +4,8 @@ os.environ['RUN_ENV'] = 'test'
 from src.model import user_model
 from src.utils.settings import Settings
 
+from src.utils.db import db
+
 import psycopg2
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 
@@ -15,37 +17,18 @@ def postgresql_connection():
     con.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
     return con
 
-def delete_database():
-
-    if not settings.db_name.startswith("test_"):
-        raise Exception(f'Invalid name for database = {settings.db_name}')
-
-    sql_drop_db = f"DROP DATABASE IF EXISTS {settings.db_name}"
-    con = postgresql_connection()
-    cursor = con.cursor()
-    cursor.execute(f"SELECT pg_terminate_backend(pg_stat_activity.pid) FROM pg_stat_activity WHERE  pg_stat_activity.datname = '{settings.db_name}' AND pid <> pg_backend_pid();")
-    cursor.execute(sql_drop_db)
-    con.close()
-
-def create_database():
-    sql_create_db = f"CREATE DATABASE {settings.db_name} WITH OWNER = {settings.db_user} ENCODING = 'UTF8' CONNECTION LIMIT = -1;"
-
-    con = postgresql_connection()
-    cursor = con.cursor()
-    cursor.execute(sql_create_db)
-    con.close()
+def delete_tables():
+    with db:
+        result = db.table_exists(user_model.User)
+        if result:
+            db.drop_tables([user_model.User])
 
 def pytest_sessionstart(session):
-
-    delete_database()
-    create_database()
-
-    from src.utils.db import db
-
+    delete_tables()
     with db:
         db.create_tables([user_model.User])
 
 
 def pytest_sessionfinish(session, exitstatus):
-    delete_database()
+    delete_tables()
 

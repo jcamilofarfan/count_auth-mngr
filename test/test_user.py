@@ -52,7 +52,6 @@ def test_create_user_duplicate_email():
     data = response.json()
     assert data['detail'] == 'Email already registered'
 
-
 def test_create_user_duplicate_username():
     client = TestClient(app)
 
