@@ -141,7 +141,7 @@ def test_login_user_username_not_exist():
 def create_and_login_user(username:str):
     client = TestClient(app)
     user = {
-        "email": f'{username}@cosasdedevs.com',
+        "email": f'{username}@pruebas.com',
         "username": username,
         "password": "password",
         "updated_at": "2022-08-02T16:57:37.475575",
