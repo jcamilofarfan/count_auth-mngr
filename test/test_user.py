@@ -80,23 +80,10 @@ def test_create_user_duplicate_username():
 
 def test_login_user_ok():
     client = TestClient(app)
-    user = {
-        "email": "gustavo@email.com",
-        "username": "gustavo",
-        "password": "password",
-        "updated_at": "2022-08-02T16:57:37.475575",
-        "created_at": "2022-08-02T16:57:37.475575",
-        "status": True
-    }
-
-    response = client.post(
-        '/api/v1/user/',
-        json=user,
-    )
 
     login = {
         'grant_type': '',
-        "username": "gustavo",
+        "username": "username",
         "password": "password",
         'scope': '',
         'client_id': '',
@@ -140,19 +127,6 @@ def test_login_user_username_not_exist():
 
 def create_and_login_user(username:str):
     client = TestClient(app)
-    user = {
-        "email": f'{username}@pruebas.com',
-        "username": username,
-        "password": "password",
-        "updated_at": "2022-08-02T16:57:37.475575",
-        "created_at": "2022-08-02T16:57:37.475575",
-        "status": True
-    }
-
-    response = client.post(
-        '/api/v1/user/',
-        json=user,
-    )
 
     login = {
         'grant_type': '',
@@ -175,7 +149,7 @@ def create_and_login_user(username:str):
     return data['access_token']
 
 def test_refresh_token_user():
-    token = create_and_login_user('test_refresh')
+    token = create_and_login_user('username')
     client = TestClient(app)
 
     response = client.post(
