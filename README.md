@@ -1,7 +1,7 @@
 # count_auth-mngr
 
-
 ## Description
+
 Api de Autenticación y Registro de Usuarios
 
 ## Install
@@ -13,7 +13,6 @@ Api de Autenticación y Registro de Usuarios
     pip install -r requirements.txt
 
     uvicorn main:app --reload
-
 
 ## Documentation
 
