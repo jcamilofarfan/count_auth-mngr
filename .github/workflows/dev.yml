@@ -29,9 +29,7 @@ jobs:
           python -m venv venv
       - name: Activar entorno virtual
         run: |
-          if[ -f venv/bin/activate ]; then
-            source venv/bin/activate
-          fi
+          if[ -f venv/bin/activate ]; then source venv/bin/activate; fi
       - name: Instalar dependencias
         run: |
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
