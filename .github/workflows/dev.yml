@@ -23,11 +23,17 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: '3.10'
-      - name: Install dependencies
+      - name: Crear entorno virtual
         run: |
           python -m pip install --upgrade pip
           python -m venv venv
-          source venv/bin/activate
+      - name: Activar entorno virtual
+        run: |
+          if[ -f venv/bin/activate ]; then
+            source venv/bin/activate
+          fi
+      - name: Instalar dependencias
+        run: |
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
       - name: Unit Testing with pytest
         run: |
