@@ -83,8 +83,8 @@ def test_login_user_ok():
 
     login = {
         'grant_type': '',
-        "username": "username",
-        "password": "password",
+        'username': 'username',
+        'password': 'password',
         'scope': '',
         'client_id': '',
         'client_secret': ''
@@ -125,13 +125,13 @@ def test_login_user_username_not_exist():
     data = response.json()
     assert data['detail'] == 'Incorrect username or password'
 
-def create_and_login_user(username:str):
+def create_and_login_user():
     client = TestClient(app)
 
     login = {
         'grant_type': '',
-        "username": username,
-        "password": "password",
+        'username': 'username',
+        "password": 'password',
         'scope': '',
         'client_id': '',
         'client_secret': ''
@@ -149,7 +149,7 @@ def create_and_login_user(username:str):
     return data['access_token']
 
 def test_refresh_token_user():
-    token = create_and_login_user('username')
+    token = create_and_login_user()
     client = TestClient(app)
 
     response = client.post(
