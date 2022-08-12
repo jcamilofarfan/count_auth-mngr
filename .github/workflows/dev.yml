@@ -17,6 +17,8 @@ jobs:
       DB_PASS: ${{ secrets.DB_PASS }}
       DB_HOST: ${{ secrets.DB_HOST }}
       DB_PORT: ${{ secrets.DB_PORT }}
+      ACCESS_TOKEN_EXPIRE_MINUTES: ${{ secrets.ACCESS_TOKEN_EXPIRE_MINUTES }}
+      SECRET_KEY: ${{ secrets.SECRET_KEY }}
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python 3.10
